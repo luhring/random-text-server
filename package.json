@@ -1,0 +1,9 @@
+{
+  "name": "random-text-server",
+  "version": "1.0.0",
+  "description": "This app returns random bytes as hex.",
+  "main": "app.js",
+  "author": "Dan Luhring <dan+github@luhrings.com>",
+  "repository": "https://github.com/luhring/random-text-server",
+  "license": "MIT"
+}
