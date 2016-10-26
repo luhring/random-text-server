@@ -1,32 +1,36 @@
 const http = require('http');
 const crypto = require('crypto');
 
-const hostname = '127.0.0.1';
-const port = 3000;
-const encodingFormatForRandomBytes = "hex";
+const _hostname = '127.0.0.1';
+const _port = 3000;
+const _contentType = "text/plain";
+const _charset = "utf-8";
+const _encodingFormatForRandomBytes = "hex";
+
+function setHeadersOnResponseAndSend(res, statusCode, contentType, charset, responseContent) {
+  res.statusCode = statusCode;
+  res.setHeader('Content-Type', contentType);
+  res.setHeader('charset', charset);
+  res.end(responseContent);
+}
 
 function respondWithNotFound(res) {
-  res.statusCode = 404;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end("Not found.");
+  const responseContent = "Not found.";
+  setHeadersOnResponseAndSend(res, 404, _contentType, _charset, responseContent);
 }
 
 function respondWithBadRequest(res) {
-  res.statusCode = 400;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end("Bad request.");
+  const responseContent = "Bad request.";
+  setHeadersOnResponseAndSend(res, 400, _contentType, _charset, responseContent);
 }
 
 function respondWithInternalServerError(res) {
-  res.statusCode = 500;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end("Internal server error.");
+  const responseContent = "Internal server error.";
+  setHeadersOnResponseAndSend(res, 500, _contentType, _charset, responseContent);
 }
 
 function respondWithSuccess(res, content) {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end(content);
+  setHeadersOnResponseAndSend(res, 200, _contentType, _charset, content);
 }
 
 function respondToRequest(res, requestedBytesParameter) {
@@ -39,7 +43,7 @@ function respondToRequest(res, requestedBytesParameter) {
       if (err) {
         respondWithInternalServerError(res);
       } else {
-        respondWithSuccess(res, `${buf.toString(encodingFormatForRandomBytes)}\n`);
+        respondWithSuccess(res, `${buf.toString(_encodingFormatForRandomBytes)}\n`);
       }
     });
   }
@@ -59,6 +63,6 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+server.listen(_port, _hostname, () => {
+  console.log(`Server running at http://${_hostname}:${_port}/`);
 });
