@@ -6,32 +6,50 @@ function respondWithNotFound(res) {
   res.end();
 }
 
-function respondWithRandomData(res, countOfRandomBytes) {
-  res.setHeader('Content-Type', 'text/plain');
+function respondWithBadRequest(res) {
+  res.statusCode = 400;
+  res.end();
+}
 
-  crypto.randomBytes(countOfRandomBytes, (err, buf) => {
-    if (err) {
-      res.statusCode = 500;
-      res.end();
-    } else {
-      res.statusCode = 200;
-      res.end(`${buf.toString('hex')}\n`);
-    }
-  });
+function respondWithInternalServerError(res) {
+  res.statusCode = 500;
+  res.end();
+}
+
+function respondWithSuccess(res, content) {
+  res.setHeader('Content-Type', 'text/plain');
+  res.statusCode = 200;
+  res.end(content);
+}
+
+function respondToRequest(res, requestedBytesParameter) {
+  const countOfRequestedBytes = parseInt(requestedBytesParameter);
+
+  if (isNaN(countOfRequestedBytes) || countOfRequestedBytes < 0) {
+    respondWithBadRequest(res);
+  } else {
+    crypto.randomBytes(countOfRequestedBytes, (err, buf) => {
+      if (err) {
+        respondWithInternalServerError(res);
+      } else {
+        respondWithSuccess(res, `${buf.toString('hex')}\n`);
+      }
+    });
+  }
 }
 
 const hostname = '127.0.0.1';
 const port = 3000;
 
 const server = http.createServer((req, res) => {
-  console.log("Handling request for: " + req.url);
+  const requestedPath = req.url;
+
+  console.log("Handling request for: " + requestedPath);
 
   if (req.url !== "/favicon.ico") {
-    const requestedBytesParameter = parseInt(req.url.substr(1));
+    const requestedBytesParameter = requestedPath.substr(1);
 
-    if (requestedBytesParameter !== NaN) {
-      respondWithRandomData(res, requestedBytesParameter);
-    }
+    respondToRequest(res, requestedBytesParameter);
   } else {
     respondWithNotFound(res);
   }
