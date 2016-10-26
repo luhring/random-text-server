@@ -1,7 +1,11 @@
-FROM node:latest
+FROM node:6.1.0-onbuild
 
-COPY . .
+COPY . /var/www
+
+WORKDIR /var/www
+
+RUN npm install
 
 EXPOSE 3000
 
-CMD ["node","app.js"]
+ENTRYPOINT  ["node", "app.js"]
