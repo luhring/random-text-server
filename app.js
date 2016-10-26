@@ -5,7 +5,7 @@ const _hostname = '127.0.0.1';
 const _port = 3000;
 const _contentType = "text/plain";
 const _charset = "utf-8";
-const _encodingFormatForRandomBytes = "hex";
+const _encodingFormatForRandomBytes = "base64";
 
 function setHeadersOnResponseAndSend(res, statusCode, contentType, charset, responseContent) {
   res.statusCode = statusCode;
