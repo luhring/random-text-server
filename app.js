@@ -3,22 +3,25 @@ const crypto = require('crypto');
 
 function respondWithNotFound(res) {
   res.statusCode = 404;
-  res.end();
+  res.setHeader('Content-Type', 'text/plain');
+  res.end("Not found.");
 }
 
 function respondWithBadRequest(res) {
   res.statusCode = 400;
-  res.end();
+  res.setHeader('Content-Type', 'text/plain');
+  res.end("Bad request.");
 }
 
 function respondWithInternalServerError(res) {
   res.statusCode = 500;
-  res.end();
+  res.setHeader('Content-Type', 'text/plain');
+  res.end("Internal server error.");
 }
 
 function respondWithSuccess(res, content) {
-  res.setHeader('Content-Type', 'text/plain');
   res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
   res.end(content);
 }
 
