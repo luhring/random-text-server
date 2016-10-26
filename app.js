@@ -1,6 +1,10 @@
 const http = require('http');
 const crypto = require('crypto');
 
+const hostname = '127.0.0.1';
+const port = 3000;
+const encodingFormatForRandomBytes = "hex";
+
 function respondWithNotFound(res) {
   res.statusCode = 404;
   res.setHeader('Content-Type', 'text/plain');
@@ -35,14 +39,11 @@ function respondToRequest(res, requestedBytesParameter) {
       if (err) {
         respondWithInternalServerError(res);
       } else {
-        respondWithSuccess(res, `${buf.toString('hex')}\n`);
+        respondWithSuccess(res, `${buf.toString(encodingFormatForRandomBytes)}\n`);
       }
     });
   }
 }
-
-const hostname = '127.0.0.1';
-const port = 3000;
 
 const server = http.createServer((req, res) => {
   const requestedPath = req.url;
