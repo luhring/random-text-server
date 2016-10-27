@@ -1,7 +1,7 @@
 const http = require('http');
 const crypto = require('crypto');
 
-const _hostname = '127.0.0.1';
+// Configuration constants
 const _port = 3000;
 const _contentType = "text/plain";
 const _charset = "utf-8";
@@ -63,6 +63,6 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(_port, _hostname, () => {
-  console.log(`Server running at http://${_hostname}:${_port}/`);
+server.listen(_port, () => {
+  console.log(`Server running on port ${_port}`);
 });
